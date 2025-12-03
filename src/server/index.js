@@ -55,7 +55,7 @@ exitHook(() => {
 });
 
 if (!config.enableWorkers) {
-    const formatUrl = (secure, hostname, port) => `${secure ? 'https' : 'http'}://${hostname}:${port}`;
+    const formatUrl = (secure, hostname, port) => `${secure ? 'https' : 'http'}://${hostname}:`;
     logger.info(
         `(server) Rammerhead proxy is listening on ${formatUrl(config.ssl, config.bindingAddress, config.port)}`
     );
@@ -102,7 +102,7 @@ if (config.enableWorkers) {
 
     if (closeMasters[0]) {
         // master process //
-        const formatUrl = (secure, hostname, port) => `${secure ? 'https' : 'http'}://${hostname}:${port}`;
+        const formatUrl = (secure, hostname, port) => `${secure ? 'https' : 'http'}://${hostname}`;
         logger.info(
             `Rammerhead proxy load balancer is listening on ${formatUrl(
                 config.ssl,
