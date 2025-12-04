@@ -95,10 +95,10 @@ if (config.enableWorkers) {
     logger.info(JSON.stringify({ port: config.port, crossPort: config.crossDomainPort, master: cluster.isMaster }));
     const closeMasters = [sticky.listen(proxyServer.server1, config.port, config.bindingAddress, stickyOptions)];
     if (config.crossDomainPort) {
-        closeMasters.push(
-            sticky.listen(proxyServer.server2, config.crossDomainPort, config.bindingAddress, stickyOptions)
-        );
-    }
+    console.warn('crossDomainPort is disabled for Render');
+    // skip creating server2
+}
+
 
     if (closeMasters[0]) {
         // master process //
