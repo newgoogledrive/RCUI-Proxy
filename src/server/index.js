@@ -21,18 +21,23 @@ const logger = new RammerheadLogging({
     generatePrefix: (level) => prefix + config.generatePrefix(level)
 });
 
+const PORT = process.env.PORT || 8080;
+
 const proxyServer = new RammerheadProxy({
     logger,
     loggerGetIP: config.getIP,
     bindingAddress: config.bindingAddress,
-    port: config.port,
-    crossDomainPort: config.crossDomainPort,
+    port: PORT,                 // force Render port
+    crossDomainPort: null,      // disable second server
     dontListen: config.enableWorkers,
     ssl: config.ssl,
     getServerInfo: config.getServerInfo,
     disableLocalStorageSync: config.disableLocalStorageSync,
     jsCache: config.jsCache,
-    disableHttp2: config.disableHttp2
+    disableHttp2: config.disableHttp2,
+    
+    // Force client URLs to use Render port
+    getClientPort: () => PORT,  
 });
 
 if (config.publicDir) addStaticDirToProxy(proxyServer, config.publicDir);
