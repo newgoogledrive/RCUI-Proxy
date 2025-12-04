@@ -62,6 +62,15 @@ const proxyServer = new RammerheadProxy({
     // Force client URLs to use Render port
     getClientPort: () => PORT,  
 });
+// Override _rewriteServerInfo to remove port for Render
+const originalRewrite = proxyServer._rewriteServerInfo.bind(proxyServer);
+proxyServer._rewriteServerInfo = (req) => {
+    const info = originalRewrite(req);
+    // Remove :port from domain
+    info.domain = `${info.protocol}//${info.hostname}`;
+    return info;
+};
+
 
 if (config.publicDir) addStaticDirToProxy(proxyServer, config.publicDir);
 
