@@ -437,16 +437,24 @@ class RammerheadProxy extends Proxy {
      * @returns {ServerInfo}
      */
     _rewriteServerInfo(req) {
-        const serverInfo = this.getServerInfo(req);
-        return {
-            hostname: serverInfo.hostname,
-            port: serverInfo.port,
-            crossDomainPort: serverInfo.crossDomainPort || this.crossDomainPort || serverInfo.port,
-            protocol: serverInfo.protocol,
-            domain: `${serverInfo.protocol}//${serverInfo.hostname}:${serverInfo.port}`,
-            cacheRequests: false
-        };
-    }
+    const serverInfo = this.getServerInfo(req);
+    // Only append the port if it’s non-standard
+    const portPart =
+        (serverInfo.protocol === 'http:' && serverInfo.port !== 80) ||
+        (serverInfo.protocol === 'https:' && serverInfo.port !== 443)
+            ? `:${serverInfo.port}`
+            : '';
+
+    return {
+        hostname: serverInfo.hostname,
+        port: serverInfo.port,
+        crossDomainPort: this.crossDomainPort || serverInfo.crossDomainPort || serverInfo.port,
+        protocol: serverInfo.protocol,
+        domain: `${serverInfo.protocol}//${serverInfo.hostname}${portPart}`,
+        cacheRequests: false
+    };
+}
+
     /**
      * @private
      */
