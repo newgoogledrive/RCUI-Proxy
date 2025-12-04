@@ -14,7 +14,7 @@ module.exports = {
    port: process.env.PORT || 8080,
 
 // Rammerhead's second port MUST match the primary port on serverless hosts
-crossDomainPort: process.env.PORT || 8080,
+crossDomainPort: null,
     publicDir: path.join(__dirname, '../public'), // set to null to disable
 
     // enable or disable multithreading
