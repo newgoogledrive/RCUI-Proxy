@@ -1,3 +1,26 @@
+// Temporary fix: rewrite any client JS that tries to redirect to :8080
+const http = require('http');
+const originalWrite = http.ServerResponse.prototype.write;
+const originalEnd = http.ServerResponse.prototype.end;
+
+http.ServerResponse.prototype.write = function (chunk, ...args) {
+    if (chunk && typeof chunk === 'string') {
+        chunk = chunk.replace(/:8080/g, ''); // remove the :8080
+    } else if (Buffer.isBuffer(chunk)) {
+        chunk = Buffer.from(chunk.toString().replace(/:8080/g, ''));
+    }
+    return originalWrite.call(this, chunk, ...args);
+};
+
+http.ServerResponse.prototype.end = function (chunk, ...args) {
+    if (chunk && typeof chunk === 'string') {
+        chunk = chunk.replace(/:8080/g, '');
+    } else if (Buffer.isBuffer(chunk)) {
+        chunk = Buffer.from(chunk.toString().replace(/:8080/g, ''));
+    }
+    return originalEnd.call(this, chunk, ...args);
+};
+
 const cluster = require('cluster');
 if (cluster.isMaster) {
     require('dotenv-flow').config();
