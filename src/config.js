@@ -10,8 +10,11 @@ module.exports = {
     //// HOSTING CONFIGURATION ////
 
     bindingAddress: '0.0.0.0',
-    port: 8080,
-    crossDomainPort: 8081,
+   // Render assigns the port dynamically:
+   port: process.env.PORT || 8080,
+
+// Rammerhead's second port MUST match the primary port on serverless hosts
+crossDomainPort: process.env.PORT || 8080,
     publicDir: path.join(__dirname, '../public'), // set to null to disable
 
     // enable or disable multithreading
@@ -32,7 +35,7 @@ module.exports = {
     // },
 
     // enforce a password for creating new sessions. set to null to disable
-    password: 'sharkie4life',
+    password: 'duck1234',
 
     // disable or enable localStorage sync (turn off if clients send over huge localStorage data, resulting in huge memory usages)
     disableLocalStorageSync: false,
