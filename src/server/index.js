@@ -44,7 +44,7 @@ const logger = new RammerheadLogging({
     generatePrefix: (level) => prefix + config.generatePrefix(level)
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 10000;
 
 const proxyServer = new RammerheadProxy({
     logger,
